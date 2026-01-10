@@ -2,35 +2,35 @@
 
 ## Objectif
 
-Moderniser l'image Docker I2P de `ypopovych/i2p` (Java 11, I2P 1.9.0) vers une version moderne avec Java 17 et I2P 2.10.0, tout en maintenant la retrocompatibilite avec les installations existantes.
+Moderniser l'image Docker I2P de `ypopovych/i2p` (Java 11, I2P 1.9.0) vers une version moderne avec Java 17 et I2P 2.10.0, tout en maintenant la rétrocompatibilité avec les installations existantes.
 
-## Probleme Initial
+## Problème Initial
 
 L'image `ypopovych/i2p:latest` utilisait :
 - `debian:stable-slim` avec `default-jre-headless` (Java 11)
-- I2P 1.9.0 (obsolete)
+- I2P 1.9.0 (obsolète)
 - Avertissement dans l'interface I2P concernant Java 11
 
-## Solution Implementee
+## Solution Implémentée
 
-### 1. Mise a jour du Dockerfile
+### 1. Mise à jour du Dockerfile
 
-| Element | Avant | Apres |
+| Élément | Avant | Après |
 |---------|-------|-------|
 | Base image | `debian:stable-slim` | `debian:bookworm-slim` |
 | Java | `default-jre-headless` (Java 11) | `openjdk-17-jre-headless` |
 | I2P | 1.9.0 | 2.10.0 |
 | Optimisation | - | `--no-install-recommends`, cleanup `/var/cache/apt` |
 
-### 2. Migration Retrocompatible (entrypoint.sh)
+### 2. Migration Rétrocompatible (entrypoint.sh)
 
-Le script `entrypoint.sh` gere automatiquement la migration depuis l'ancienne image :
+Le script `entrypoint.sh` gère automatiquement la migration depuis l'ancienne image :
 
 #### Variables d'environnement
 - Support de `RUN_AS_USER` (ancien) converti en `PUID`/`PGID` (nouveau)
-- `MEM_MAX` : memoire Java, defaut passe de 128M a 256M
+- `MEM_MAX` : mémoire Java, défaut passé de 128M à 256M
 
-#### Chemins de donnees
+#### Chemins de données
 | Ancien chemin (ypopovych) | Nouveau chemin |
 |---------------------------|----------------|
 | `/var/lib/i2p/i2p-config` | `/storage/.i2p` |
@@ -38,15 +38,15 @@ Le script `entrypoint.sh` gere automatiquement la migration depuis l'ancienne im
 
 #### Logique de migration
 1. Si ancien config existe et nouveau n'existe pas → copie automatique
-2. Si ancien i2psnark monte → creation lien symbolique
+2. Si ancien i2psnark monté → création lien symbolique
 3. Si aucun ancien chemin → installation fresh normale
-4. Tolerant aux erreurs (continue si anciens chemins absents)
+4. Tolérant aux erreurs (continue si anciens chemins absents)
 
 ### 3. GitHub Actions (build.yml)
 
-Mise a jour des actions vers les dernieres versions :
+Mise à jour des actions vers les dernières versions :
 
-| Action | Avant | Apres |
+| Action | Avant | Après |
 |--------|-------|-------|
 | checkout | v2 | v4 |
 | setup-qemu-action | v1 | v3 |
@@ -54,7 +54,7 @@ Mise a jour des actions vers les dernieres versions :
 | login-action | v1 | v3 |
 | build-push-action | v2 | v6 |
 
-#### Fonctionnalites ajoutees
+#### Fonctionnalités ajoutées
 - `workflow_dispatch` : lancement manuel du build
 - `push: ${{ github.event_name != 'pull_request' }}` : ne push que sur les vrais commits
 - Cache GitHub Actions (`type=gha`) pour builds plus rapides
@@ -78,33 +78,33 @@ volumes:
   - /media/devmon/.../i2psnark:/var/lib/i2p/i2psnark
 ```
 
-### Configuration mise a jour
+### Configuration mise à jour
 ```yaml
 image: venantvr/i2p-java17:latest
 environment:
-  - RUN_AS_USER=rvv  # Toujours supporte (retrocompat)
+  - RUN_AS_USER=rvv  # Toujours supporté (rétrocompat)
 volumes:
   - /DATA/AppData/i2p/var/lib/i2p/i2p-config:/var/lib/i2p/i2p-config  # Ancien
   - /media/devmon/.../i2psnark:/var/lib/i2p/i2psnark  # Ancien
   - /DATA/AppData/i2p/storage:/storage  # NOUVEAU - requis
 ```
 
-### Avant de demarrer
+### Avant de démarrer
 ```bash
 mkdir -p /DATA/AppData/i2p/storage
 ```
 
-### Logs attendus au premier demarrage
+### Logs attendus au premier démarrage
 ```
-[i2p] RUN_AS_USER detecte, utilisez PUID/PGID a l'avenir
+[i2p] RUN_AS_USER détecté, utilisez PUID/PGID à l'avenir
 [i2p] Migration: /var/lib/i2p/i2p-config -> /storage/.i2p
-[i2p] Migration terminee
+[i2p] Migration terminée
 [i2p] Lien i2psnark: /var/lib/i2p/i2psnark -> /storage/.i2p/i2psnark
-[i2p] Demarrage I2P 2.10.0...
+[i2p] Démarrage I2P 2.10.0...
 ```
 
-### Apres migration reussie
-Les anciens volumes peuvent etre retires et la config simplifiee :
+### Après migration réussie
+Les anciens volumes peuvent être retirés et la config simplifiée :
 ```yaml
 image: venantvr/i2p-java17:latest
 environment:
@@ -116,28 +116,28 @@ volumes:
   - /media/devmon/.../i2psnark:/storage/.i2p/i2psnark  # Optionnel si externe
 ```
 
-## Tests Effectues
+## Tests Effectués
 
 1. **Build local** : OK
 2. **Nouvelle installation** (sans anciens chemins) : OK
-3. **Migration** (avec anciens chemins montes) : OK
+3. **Migration** (avec anciens chemins montés) : OK
 4. **Fresh install** (volume /storage vide) : OK
 5. **Build GitHub Actions multi-arch** : OK
 
-## Fichiers Modifies
+## Fichiers Modifiés
 
 | Fichier | Description |
 |---------|-------------|
 | `Dockerfile` | Base Bookworm, Java 17, I2P 2.10.0 |
-| `entrypoint.sh` | Migration retrocompatible, support PUID/PGID |
+| `entrypoint.sh` | Migration rétrocompatible, support PUID/PGID |
 | `.github/workflows/build.yml` | Actions v4/v6, cache, multi-arch |
-| `README.md` | Documentation complete |
-| `Claude.md` | Ce fichier de resume |
+| `README.md` | Documentation complète |
+| `Claude.md` | Ce fichier de résumé |
 
 ## Avantages
 
 1. **Performance** : Java 17 plus efficace que Java 11, surtout sur ARM64
-2. **Securite** : Debian Bookworm avec derniers patchs
-3. **Compatibilite** : Migration transparente depuis ypopovych/i2p
-4. **Simplicite** : Un seul volume `/storage` a gerer
+2. **Sécurité** : Debian Bookworm avec derniers patchs
+3. **Compatibilité** : Migration transparente depuis ypopovych/i2p
+4. **Simplicité** : Un seul volume `/storage` à gérer
 5. **Multi-arch** : Fonctionne sur PC et Raspberry Pi sans configuration

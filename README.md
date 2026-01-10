@@ -1,18 +1,18 @@
 # I2P Docker - Java 17
 
-Docker image for [I2P](https://geti2p.net/) with Java 17 on Debian Bookworm.
+Image Docker pour [I2P](https://geti2p.net/) avec Java 17 sur Debian Bookworm.
 
-Based on [ypopovych/docker-i2p](https://github.com/ypopovych/docker-i2p) with modern updates.
+Basée sur [ypopovych/docker-i2p](https://github.com/ypopovych/docker-i2p) avec des mises à jour modernes.
 
-## Features
+## Fonctionnalités
 
-- **I2P 2.10.0** (latest stable)
+- **I2P 2.10.0** (dernière version stable)
 - **Java 17** (OpenJDK 17 headless)
 - **Debian Bookworm** slim base
-- Multi-architecture: `linux/amd64`, `linux/arm64`
-- Backward compatible with `ypopovych/i2p` volumes
+- Multi-architecture : `linux/amd64`, `linux/arm64`
+- Rétrocompatible avec les volumes `ypopovych/i2p`
 
-## Quick Start
+## Démarrage rapide
 
 ```bash
 docker run -d \
@@ -23,21 +23,21 @@ docker run -d \
   venantvr/i2p-java17:latest
 ```
 
-Access the I2P console at http://localhost:7657
+Accédez à la console I2P sur http://localhost:7657
 
-## Environment Variables
+## Variables d'environnement
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PUID` | 1000 | User ID for i2p process |
-| `PGID` | 1000 | Group ID for i2p process |
-| `MEM_MAX` | 256 | Max Java heap memory (MB) |
+| Variable | Défaut | Description |
+|----------|--------|-------------|
+| `PUID` | 1000 | User ID pour le processus i2p |
+| `PGID` | 1000 | Group ID pour le processus i2p |
+| `MEM_MAX` | 256 | Mémoire heap Java max (MB) |
 
 ## Volumes
 
-| Path | Description |
-|------|-------------|
-| `/storage` | I2P data directory (config in `/storage/.i2p`) |
+| Chemin | Description |
+|--------|-------------|
+| `/storage` | Répertoire de données I2P (config dans `/storage/.i2p`) |
 
 ## Docker Compose
 
@@ -59,29 +59,29 @@ services:
     restart: unless-stopped
 ```
 
-## Migration from ypopovych/i2p
+## Migration depuis ypopovych/i2p
 
-This image is backward compatible. Keep your existing volumes and the entrypoint will automatically migrate:
+Cette image est rétrocompatible. Gardez vos volumes existants et l'entrypoint migrera automatiquement :
 
 ```yaml
 volumes:
-  # Keep legacy volumes
+  # Gardez les anciens volumes
   - /path/to/old/i2p-config:/var/lib/i2p/i2p-config
   - /path/to/old/i2psnark:/var/lib/i2p/i2psnark
-  # Add new volume
+  # Ajoutez le nouveau volume
   - /path/to/new/storage:/storage
 ```
 
-On first start, you'll see:
+Au premier démarrage, vous verrez :
 ```
 [i2p] Migration: /var/lib/i2p/i2p-config -> /storage/.i2p
-[i2p] Migration terminee
+[i2p] Migration terminée
 [i2p] Lien i2psnark: /var/lib/i2p/i2psnark -> /storage/.i2p/i2psnark
 ```
 
-After migration, you can remove the legacy volumes.
+Après la migration, vous pouvez supprimer les anciens volumes.
 
-## Exposed Ports
+## Ports exposés
 
 | Port | Description |
 |------|-------------|
@@ -92,7 +92,7 @@ After migration, you can remove the legacy volumes.
 | 7656 | SAM |
 | 7657 | Router Console |
 | 7658 | Eepsite |
-| 7659-7660 | Additional services |
+| 7659-7660 | Services additionnels |
 | 8998 | Streaming |
 
 ## Build
@@ -101,13 +101,13 @@ After migration, you can remove the legacy volumes.
 docker build -t i2p-java17 .
 ```
 
-Multi-arch build:
+Build multi-arch :
 ```bash
 docker buildx build --platform linux/amd64,linux/arm64 -t i2p-java17 .
 ```
 
-## License
+## Licence
 
-MIT License - See [LICENSE](LICENSE)
+MIT License - Voir [LICENSE](LICENSE)
 
-Based on work by Yehor Popovych.
+Basé sur le travail de Yehor Popovych.
