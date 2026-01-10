@@ -35,7 +35,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           platforms: linux/amd64,linux/arm64
           tags: |
-            venantvr/i2p-java17-arm64:latest
-            venantvr/i2p-java17-arm64:2.10.0
+            venantvr/i2p-java17:latest
+            venantvr/i2p-java17:2.10.0
           cache-from: type=gha
           cache-to: type=gha,mode=max

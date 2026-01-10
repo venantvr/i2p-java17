@@ -20,7 +20,7 @@ docker run -d \
   -p 7657:7657 \
   -p 4444:4444 \
   -v i2p-data:/storage \
-  venantvr/i2p-java17-arm64:latest
+  venantvr/i2p-java17:latest
 ```
 
 Access the I2P console at http://localhost:7657
@@ -44,7 +44,7 @@ Access the I2P console at http://localhost:7657
 ```yaml
 services:
   i2p:
-    image: venantvr/i2p-java17-arm64:latest
+    image: venantvr/i2p-java17:latest
     container_name: i2p
     environment:
       - PUID=1000
