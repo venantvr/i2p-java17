@@ -1,7 +1,7 @@
 # Debian Bookworm pour Java 17 et paquets recents
 FROM debian:bookworm-slim
 
-LABEL maintainer="Yehor Popovych <popovych.yegor@gmail.com>"
+LABEL maintainer="venantvr"
 
 ENV I2P_VERSION="2.10.0"
 ENV I2P_PREFIX="/opt/i2p"
