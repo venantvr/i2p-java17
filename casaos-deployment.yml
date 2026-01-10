@@ -1,0 +1,51 @@
+name: stunning_jerry
+services:
+  i2p:
+    cpu_shares: 90
+    command: []
+    container_name: i2p-snark
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    environment:
+      - RUN_AS_USER=rvv
+    hostname: i2p-snark
+    image: ypopovych/i2p:latest
+    labels:
+      icon: https://icon.casaos.io/main/all/i2p.png
+    ports:
+      - target: 7657
+        published: "7657"
+        protocol: tcp
+      - target: 7658
+        published: "7658"
+        protocol: tcp
+      - target: 4444
+        published: "4444"
+        protocol: tcp
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /DATA/AppData/i2p/var/lib/i2p/i2p-config
+        target: /var/lib/i2p/i2p-config
+      - type: bind
+        source: /media/devmon/sdc1-ata-WDC_WD10JMVW-11A/i2psnark
+        target: /var/lib/i2p/i2psnark
+    devices: []
+    cap_add: []
+    network_mode: bridge
+x-casaos:
+  author: self
+  category: self
+  hostname: ""
+  icon: https://icon.casaos.io/main/all/i2p.png
+  index: /
+  is_uncontrolled: false
+  port_map: "7657"
+  scheme: http
+  store_app_id: stunning_jerry
+  title:
+    custom: ""
+    en_us: i2p
