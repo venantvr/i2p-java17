@@ -111,3 +111,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t i2p-java17 .
 MIT License - Voir [LICENSE](LICENSE)
 
 Basé sur le travail de Yehor Popovych.
+
+## Stack
+
+[![Stack](https://skillicons.dev/icons?i=bash,docker,linux,dotnet,java&theme=dark)](https://skillicons.dev)
