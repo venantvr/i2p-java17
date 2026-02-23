@@ -114,4 +114,4 @@ Basé sur le travail de Yehor Popovych.
 
 ## Stack
 
-[![Stack](https://skillicons.dev/icons?i=bash,docker,linux,dotnet,java&theme=dark)](https://skillicons.dev)
+[![Stack](https://skillicons.dev/icons?i=java,bash,docker,linux&theme=dark)](https://skillicons.dev)
